@@ -26,7 +26,7 @@ import java.util.Random;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-    private final int DELAY1 = 800;
+    private final int DELAY1 = 400;
     //private final int DELAY2 = 800;
     private AppCompatImageView game_IMG_back;
 
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean pause = false;
     private Random rn = new Random();
+    private boolean send=true;
 
 
     @Override
@@ -83,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-//        Glide
-//                .with(MainActivity.this)
-//                .load("https://freedesignfile.com/upload/2020/03/Farm-vector.jpg")
-//                .into(game_IMG_back);
+        Glide
+                .with(MainActivity.this)
+                .load("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2bc72d3c-39ce-45f3-a55c-e0903291ace0/d17dpy4-a8d0b94a-0351-4d9b-9636-33cc1842f0d2.jpg/v1/fill/w_600,h_486,q_75,strp/background_art_for_pokemon_by_orangedroplet_d17dpy4-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NDg2IiwicGF0aCI6IlwvZlwvMmJjNzJkM2MtMzljZS00NWYzLWE1NWMtZTA5MDMyOTFhY2UwXC9kMTdkcHk0LWE4ZDBiOTRhLTAzNTEtNGQ5Yi05NjM2LTMzY2MxODQyZjBkMi5qcGciLCJ3aWR0aCI6Ijw9NjAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.Xa7d7pbU0rU7MNWAomQrAPKjMwYxdB82ALLKMZO_pOs")
+                .into(game_IMG_back);
 //        Glide
 //                .with(MainActivity.this)
 //                .load(R.drawable.img_back)
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         findViewById(R.id.game_IMG_pika3)};
         game_BTN_left = findViewById(R.id.game_BTN_left);
         game_BTN_right = findViewById(R.id.game_BTN_right);
+        game_IMG_back = findViewById(R.id.game_IMG_back);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
                 game_IMG_pokeballs[j][i].setVisibility(View.INVISIBLE);
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         game_IMG_pikachus[0].setVisibility(View.INVISIBLE);
         game_IMG_pikachus[2].setVisibility(View.INVISIBLE);
         game_IMG_pikachus[1].setVisibility(View.VISIBLE);
+
     }
 
     private void moveRight() {
@@ -227,9 +230,10 @@ public class MainActivity extends AppCompatActivity {
             if (visiblePokeball[5][i] && visiblePikachu[i]) {
                 reduceLives();
                 vibrate();
-                updateLives();
+
             //    sound.play(MediaActionSound.STOP_VIDEO_RECORDING);
                 Toast.makeText(this, "CRASH", Toast.LENGTH_SHORT).show();
+                updateLives();
             }
         }
     }
@@ -242,14 +246,16 @@ public class MainActivity extends AppCompatActivity {
             v.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             //deprecated in API 26
-            v.vibrate(10);
+            v.vibrate(100);
         }
     }
 
     private void sendPokeballs() {
+        if (send){
         int i = rn.nextInt(3);
         visiblePokeball[0][i] = true;
-        game_IMG_pokeballs[0][i].setVisibility(View.VISIBLE);
+        game_IMG_pokeballs[0][i].setVisibility(View.VISIBLE);}
+        send = !send;
 
     }
 
