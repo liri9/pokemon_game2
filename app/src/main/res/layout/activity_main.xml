@@ -344,7 +344,6 @@
                 android:gravity="start"
                 app:iconSize="50dp"
                 app:iconTint="#1D451B"
-
                 android:background="@android:color/transparent"
                 app:icon="@drawable/ic_arrow_right"/>
 

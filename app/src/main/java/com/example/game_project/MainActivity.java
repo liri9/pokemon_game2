@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.Glide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,19 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton game_BTN_right;
     private MaterialButton game_BTN_left;
     private int lives = 3;
-    private MediaActionSound sound = new MediaActionSound();
-
-    private boolean visiblePikachu[] = {false, true, false};
-    private boolean visiblePokeball[][] = {
-            {false, false, false},
-            {false, false, false},
-            {false, false, false},
-            {false, false, false},
-            {false, false, false},
-            {false, false, false}};
-
+    private final int ROWS =5, COLS =3;
     private enum direction {right, left}
-
     private boolean pause = false;
     private Random rn = new Random();
     private boolean send=true;
@@ -88,10 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 .with(MainActivity.this)
                 .load("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2bc72d3c-39ce-45f3-a55c-e0903291ace0/d17dpy4-a8d0b94a-0351-4d9b-9636-33cc1842f0d2.jpg/v1/fill/w_600,h_486,q_75,strp/background_art_for_pokemon_by_orangedroplet_d17dpy4-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NDg2IiwicGF0aCI6IlwvZlwvMmJjNzJkM2MtMzljZS00NWYzLWE1NWMtZTA5MDMyOTFhY2UwXC9kMTdkcHk0LWE4ZDBiOTRhLTAzNTEtNGQ5Yi05NjM2LTMzY2MxODQyZjBkMi5qcGciLCJ3aWR0aCI6Ijw9NjAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.Xa7d7pbU0rU7MNWAomQrAPKjMwYxdB82ALLKMZO_pOs")
                 .into(game_IMG_back);
-//        Glide
-//                .with(MainActivity.this)
-//                .load(R.drawable.img_back)
-//                .into(game_IMG_back);
         game_BTN_left.setOnClickListener(v -> moveLeft());
         game_BTN_right.setOnClickListener(v -> moveRight());
     }
@@ -128,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
         game_BTN_left = findViewById(R.id.game_BTN_left);
         game_BTN_right = findViewById(R.id.game_BTN_right);
         game_IMG_back = findViewById(R.id.game_IMG_back);
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 6; j++) {
+        for (int i = 0; i < COLS; i++) {
+            for (int j = 0; j < ROWS; j++) {
                 game_IMG_pokeballs[j][i].setVisibility(View.INVISIBLE);
             }
         }
@@ -140,14 +126,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveRight() {
-        if (!visiblePikachu[2]) {
-            if (visiblePikachu[0] == true) {
-                visiblePikachu[0] = false;
-                visiblePikachu[1] = true;
+        if (game_IMG_pikachus[2].getVisibility() != View.VISIBLE) {
+            if (game_IMG_pikachus[0].getVisibility()==View.VISIBLE) {
                 updateLocationUI(1, direction.right);
             } else {
-                visiblePikachu[1] = false;
-                visiblePikachu[2] = true;
                 updateLocationUI(2, direction.right);
             }
         }
@@ -155,14 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void moveLeft() {
-        if (visiblePikachu[0] == false) {
-            if (visiblePikachu[1] == true) {
-                visiblePikachu[1] = false;
-                visiblePikachu[0] = true;
+        if (game_IMG_pikachus[0].getVisibility() != View.VISIBLE) {
+            if (game_IMG_pikachus[1].getVisibility()==View.VISIBLE) {
                 updateLocationUI(0, direction.left);
             } else {
-                visiblePikachu[2] = false;
-                visiblePikachu[1] = true;
                 updateLocationUI(1, direction.left);
             }
         }
@@ -184,8 +162,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void gameOver() {
-        Toast.makeText(this, "Game Over, starting again", Toast.LENGTH_SHORT).show();
-        lives = 3;
+        stopTimer();
+        pause=true;
+        for (int i = 0; i < COLS; i++) {
+            for (int j = 0; j < ROWS; j++) {
+                game_IMG_pokeballs[j][i].setVisibility(View.INVISIBLE);
+            }
+        }
+        Intent intent = new Intent(MainActivity.this, GameOverActivity.class);
+        startActivity(intent);
     }
 
     private Handler handler = new Handler();
@@ -193,16 +178,8 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             handler.postDelayed(runnable1, DELAY1);
             updateUI();
-            //  handler.postDelayed(runnable, DELAY2);
         }
     };
-//    private Runnable runnable2 = new Runnable() {
-//        public void run() {
-//            handler.postDelayed(runnable2, DELAY2);
-//            sendPokeballs();
-//            //  handler.postDelayed(runnable, DELAY2);
-//        }
-//    };
 
     private void updateLocationUI(int location, direction direction) {
         if (direction == direction.right) {
@@ -215,23 +192,12 @@ public class MainActivity extends AppCompatActivity {
         checkHit();
     }
 
-//    private void checkHit(int location) {
-//        if (visiblePokeball[5][location]) {
-//            //  vibrate();
-//            reduceLives();
-//            updateLives();
-//            Toast.makeText(this, "CRASH", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
 
     private void checkHit() {
-        for (int i = 0; i < 3; i++) {
-            if (visiblePokeball[5][i] && visiblePikachu[i]) {
+        for (int i = 0; i < COLS; i++) {
+            if (game_IMG_pokeballs[ROWS][i].getVisibility()==View.VISIBLE && game_IMG_pikachus[i].getVisibility()==View.VISIBLE) {
                 reduceLives();
                 vibrate();
-
-            //    sound.play(MediaActionSound.STOP_VIDEO_RECORDING);
                 Toast.makeText(this, "CRASH", Toast.LENGTH_SHORT).show();
                 updateLives();
             }
@@ -253,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
     private void sendPokeballs() {
         if (send){
         int i = rn.nextInt(3);
-        visiblePokeball[0][i] = true;
         game_IMG_pokeballs[0][i].setVisibility(View.VISIBLE);}
         send = !send;
 
@@ -261,15 +226,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveDownUI() {
         if (pause == false) {
-            for (int j = 0; j < 3; j++) {
-                visiblePokeball[5][j] = false;
-                game_IMG_pokeballs[5][j].setVisibility(View.INVISIBLE);
+            for (int j = 0; j < COLS; j++) {
+                game_IMG_pokeballs[ROWS][j].setVisibility(View.INVISIBLE);
             }
-            for (int j = 0; j < 3; j++) {
-                for (int i = 5; i > 0; i--) {
-                    if (visiblePokeball[i - 1][j]) {
-                        visiblePokeball[i - 1][j] = false;
-                        visiblePokeball[i][j] = true;
+            for (int j = 0; j < COLS; j++) {
+                for (int i = ROWS; i > 0; i--) {
+                    if (game_IMG_pokeballs[i - 1][j].getVisibility() == View.VISIBLE) {
                         game_IMG_pokeballs[i - 1][j].setVisibility(View.INVISIBLE);
                         game_IMG_pokeballs[i][j].setVisibility(View.VISIBLE);
                     }
@@ -282,12 +244,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void startTimer() {
         handler.postDelayed(runnable1, DELAY1);
-        //    handler.postDelayed(runnable2, DELAY2);
-
     }
 
     private void stopTimer() {
-        //    handler.removeCallbacks(runnable2);
         handler.removeCallbacks(runnable1);
     }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameOverActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/gameOver_IMG_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/img_back" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/gameover_LBL_over"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/game_over"
+            android:text="GAME OVER"
+            android:textColor="#20243A"
+            android:textSize="120sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/gameover_LBL_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/game_over"
+            android:text="play again?"
+            android:textColor="#20243A"
+            android:textSize="100sp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/gameover_BTN_yes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/game_over"
+                android:padding="20dp"
+                android:text="yes"
+                android:textColor="#20243A"
+                android:textSize="100sp"
+                app:backgroundTint="#8BC34A"
+                app:cornerRadius="120dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/gameover_BTN_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/game_over"
+                android:padding="20dp"
+                android:text="no"
+                android:textColor="#20243A"
+                android:textSize="100sp"
+                app:backgroundTint="#8BC34A"
+                app:cornerRadius="120dp"
+
+                app:iconTint="#20243A" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>
